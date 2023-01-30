@@ -183,7 +183,7 @@ class KentDistribution(object):
     >>> abs(kent2(gamma1, gamma2, gamma3, tiny, 0.0).normalize() - 4*pi) < 4*pi*1E-12
     True
     >>> for kappa in [0.01, 0.1, 0.2, 0.5, 2, 4, 8, 16]:
-    ...     print abs(kent2(gamma1, gamma2, gamma3, kappa, 0.0).normalize() - 4*pi*sinh(kappa)/kappa) < 1E-15*4*pi*sinh(kappa)/kappa,
+    ...     print(abs(kent2(gamma1, gamma2, gamma3, kappa, 0.0).normalize() - 4*pi*sinh(kappa)/kappa) < 1E-15*4*pi*sinh(kappa)/kappa,)
     ... 
     True True True True True True True True
     """
@@ -373,7 +373,7 @@ class KentDistribution(object):
           if abs(dk) < abs(dcdk)*1E-12 and abs(db) < abs(dcdb)*1E-12  and j > 5:
             break
       
-        # print "dc", dcdk, dcdb, "(", k, b
+        # print("dc", dcdk, dcdb, "(", k, b)
       
       cache[k, b] = 2*pi*array([dcdk, dcdb])
     if return_num_iterations:
@@ -477,16 +477,16 @@ def kent_me(xs):
   return kent4(G, kappa, beta)  
 
 def __kent_mle_output1(k_me, callback):
-  print
-  print "******** Maximum Likelihood Estimation ********"
-  print "Initial moment estimates are:"
-  print "theta =", k_me.theta
-  print "phi   =", k_me.phi
-  print "psi   =", k_me.psi
-  print "kappa =", k_me.kappa
-  print "beta  =", k_me.beta
-  print "******** Starting the Gradient Descent ********"
-  print "[iteration]   kappa        beta        -L"
+  print()
+  print("******** Maximum Likelihood Estimation ********")
+  print("Initial moment estimates are:")
+  print("theta =", k_me.theta)
+  print("phi   =", k_me.phi)
+  print("psi   =", k_me.psi)
+  print("kappa =", k_me.kappa)
+  print("beta  =", k_me.beta)
+  print("******** Starting the Gradient Descent ********")
+  print("[iteration]   kappa        beta        -L")
 
 def __kent_mle_output2(x, minusL, output_count, verbose):
   interval = verbose if isinstance(verbose, int) else 1
@@ -497,7 +497,7 @@ def __kent_mle_output2(x, minusL, output_count, verbose):
       str_value += " "
     str_values.append(str_value)
   if output_count[0] % interval == 0:
-    print ("[%3i]       " + " %s" * 3) % tuple(output_count + str_values)
+    print(("[%3i]       " + " %s" * 3) % tuple(output_count + str_values))
   output_count[0] = output_count[0] + 1
 
 def kent_mle(xs, verbose=False, return_intermediate_values=False, return_bfgs_values=False, bfgs_kwargs=dict(), warning='warn'):

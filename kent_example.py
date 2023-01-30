@@ -16,7 +16,7 @@ seed(2323)
 
 def test_example_normalization(showplots=False, verbose=False, gridsize=100, print_grid=True):
   scale = (1000.0/gridsize)
-  print "Calculating the matrix M_ij of values that can be calculated: kappa=%.1f*i+1, beta=%.1f+j*1" % (scale, scale)
+  print("Calculating the matrix M_ij of values that can be calculated: kappa=%.1f*i+1, beta=%.1f+j*1" % (scale, scale))
   with warnings.catch_warnings():
     warnings.simplefilter("error")
     c_grid, dck_grid, dcb_grid = [zeros((gridsize, gridsize))-1.0 for z in xrange(3)]
@@ -64,15 +64,15 @@ def test_example_normalization(showplots=False, verbose=False, gridsize=100, pri
         ax.set_yticklabels([str(int(t*scale+1)) for t in ax.get_yticks()])
         ax.set_ylabel(r"$\kappa$")
         ax.set_xlabel(r"$\beta$")
-  print
+  print()
   if print_grid:
     for message, grid in [
       ("Iterations necessary to calculate normalize(kappa, beta):", cnum_grid),
       ("Iterations necessary to calculate the gradient of normalize(kappa, beta):", dcnum_grid)
     ]:
-      print message
+      print(message)
       for i, line in enumerate(grid):
-        print " ".join(['  x' if n == -1.0 else '%3i' % n for n in line])
+        print(" ".join(['  x' if n == -1.0 else '%3i' % n for n in line]))
     
   
 def test_example_mle(showplots=False):
@@ -84,7 +84,7 @@ def test_example_mle(showplots=False):
     kent(-0.35*pi, -0.25*pi, pi/32,  50.0, 25.0),
     kent(0.0, 0.0, pi/32,  50.0, 25.0),
   ]:
-    print "Original Distribution: k =", k
+    print("Original Distribution: k =", k)
     gridsize = 200
     u = linspace(0, 2 * pi, gridsize)
     v = linspace(0, pi, gridsize)
@@ -102,12 +102,12 @@ def test_example_mle(showplots=False):
         keys.append((i, j))
     points = array(points)
 
-    print "Drawing 10000 samples from k"
+    print("Drawing 10000 samples from k")
     xs = k.rvs(10000)
     k_me = kent_me(xs)
-    print "Moment estimation:  k_me =", k_me
+    print("Moment estimation:  k_me =", k_me)
     k_mle = kent_mle(xs, warning=sys.stdout)
-    print "Fitted with MLE:   k_mle =", k_mle
+    print("Fitted with MLE:   k_mle =", k_mle)
     assert k_me.log_likelihood(xs) < k_mle.log_likelihood(xs)
 
     value_for_color = k_mle.pdf(points)
@@ -146,17 +146,17 @@ def calculate_bias_var_and_mse(x, y):
 def test_example_mle2(num_samples, showplots=False, verbose=False, stepsize=1.0):
   max_kappa = 50.0
   real_kappas = arange(1.0, max_kappa, stepsize)
-  print "Testing various combinations of kappa and beta for", num_samples, "samples."
+  print("Testing various combinations of kappa and beta for", num_samples, "samples.")
   bias_var_mse_kappa_me, bias_var_mse_kappa_mle, bias_var_mse_beta_me, bias_var_mse_beta_mle = [list() for i in xrange(4)]
   beta_ratios = (0.0, 0.05, 0.1, 0.2, 0.3, 0.5, 1.0)
   for beta_ratio in beta_ratios:
     real_betas = beta_ratio*real_kappas
     kappas_me, kappas_mle, betas_me, betas_mle = [list() for i in xrange(4)]
     if verbose:
-      print "beta (max 2.0) = %s*kappa : kappa (max %.1f) = " % (beta_ratio, max_kappa),
+      print("beta (max 2.0) = %s*kappa : kappa (max %.1f) = " % (beta_ratio, max_kappa),)
     for kappa in real_kappas:
       if verbose:
-        print "%.1f" % kappa,
+        print("%.1f" % kappa,)
         sys.stdout.flush()
       beta = kappa*beta_ratio
       k = kent(uniform(0, pi), uniform(0, 2*pi), uniform(0, 2*pi), kappa, beta)
@@ -173,7 +173,7 @@ def test_example_mle2(num_samples, showplots=False, verbose=False, stepsize=1.0)
     bias_var_mse_kappa_mle.append(calculate_bias_var_and_mse(real_kappas, kappas_mle))
     bias_var_mse_beta_mle.append(calculate_bias_var_and_mse(real_betas, betas_mle))
     if verbose:
-      print
+      print()
     if showplots:
       from pylab import figure, show
       f = figure(figsize=(12.0, 5))
@@ -231,20 +231,20 @@ def test_example_mle2(num_samples, showplots=False, verbose=False, stepsize=1.0)
     biass_mle, vars_mle, mses_mle = zip(*bias_var_mse_mle)
     for mse_me, mse_mle, beta_ratio in zip(mses_me, mses_mle, beta_ratios):
       if mse_me < mse_mle*0.7:
-        print "MSE of MLE is lower than 0.7 times the moment estimate for %s" % name
+        print("MSE of MLE is lower than 0.7 times the moment estimate for %s" % name)
         return False
       if beta_ratio >= 0.3:
         if mse_me < mse_mle:
-          print "MSE of MLE is lower than moment estimate for %s with beta/kappa >= 0.3" % name
+          print("MSE of MLE is lower than moment estimate for %s with beta/kappa >= 0.3" % name)
           return False
       if beta_ratio > 0.5:
         if mse_me < 5*mse_mle:
-          print "MSE of MLE is not lower than five times the moment estimate %s with beta/kappa >= 0.5" % name
+          print("MSE of MLE is not lower than five times the moment estimate %s with beta/kappa >= 0.5" % name)
           return False
       
-  print "MSE of MLE is higher than 0.7 times the moment estimate for beta/kappa <= 0.2"  
-  print "MSE of MLE is higher than moment estimate for beta/kappa >= 0.3"
-  print "MSE of MLE is five times higher than moment estimates for beta/kappa >= 0.5"
+  print("MSE of MLE is higher than 0.7 times the moment estimate for beta/kappa <= 0.2"  )
+  print("MSE of MLE is higher than moment estimate for beta/kappa >= 0.3")
+  print("MSE of MLE is five times higher than moment estimates for beta/kappa >= 0.5")
   return True
 
 if __name__ == "__main__":
